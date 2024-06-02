@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>shadow maker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>shadow maker</h1>
+    <p class="sub">play with css box-shadow.</p>
+  </header>
+
+  <main class="grid">
+    <section class="left">
+      <div class="layer" id="single">
+        <h3>shadow</h3>
+        <div class="row">
+          <label>offset x</label>
+          <input type="range" min="-50" max="50" value="0" id="x" />
+          <span class="num" id="xv">0</span>
+        </div>
+        <div class="row">
+          <label>offset y</label>
+          <input type="range" min="-50" max="50" value="6" id="y" />
+          <span class="num" id="yv">6</span>
+        </div>
+        <div class="row">
+          <label>blur</label>
+          <input type="range" min="0" max="100" value="18" id="blur" />
+          <span class="num" id="blurv">18</span>
+        </div>
+        <div class="row">
+          <label>spread</label>
+          <input type="range" min="-50" max="50" value="0" id="spread" />
+          <span class="num" id="spreadv">0</span>
+        </div>
+        <div class="bottom">
+          <input type="color" value="#000000" id="color" />
+        </div>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="stage">
+        <div class="card" id="preview">
+          <h2>preview</h2>
+          <p>some sample text inside the card so the shadow has something to sit under.</p>
+        </div>
+      </div>
+
+      <div class="output">
+        <pre id="cssOut"><code>box-shadow: none;</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
