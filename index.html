@@ -9,37 +9,13 @@
 <body>
   <header class="topbar">
     <h1>shadow maker</h1>
-    <p class="sub">play with css box-shadow.</p>
+    <p class="sub">stack box-shadow layers and watch them update.</p>
   </header>
 
   <main class="grid">
     <section class="left">
-      <div class="layer" id="single">
-        <h3>shadow</h3>
-        <div class="row">
-          <label>offset x</label>
-          <input type="range" min="-50" max="50" value="0" id="x" />
-          <span class="num" id="xv">0</span>
-        </div>
-        <div class="row">
-          <label>offset y</label>
-          <input type="range" min="-50" max="50" value="6" id="y" />
-          <span class="num" id="yv">6</span>
-        </div>
-        <div class="row">
-          <label>blur</label>
-          <input type="range" min="0" max="100" value="18" id="blur" />
-          <span class="num" id="blurv">18</span>
-        </div>
-        <div class="row">
-          <label>spread</label>
-          <input type="range" min="-50" max="50" value="0" id="spread" />
-          <span class="num" id="spreadv">0</span>
-        </div>
-        <div class="bottom">
-          <input type="color" value="#000000" id="color" />
-        </div>
-      </div>
+      <div class="layers" id="layers"></div>
+      <button class="add" id="addBtn">+ add shadow</button>
     </section>
 
     <section class="right">

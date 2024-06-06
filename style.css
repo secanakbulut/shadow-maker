@@ -6,6 +6,7 @@
   --text: #e6e9ef;
   --muted: #8a93a3;
   --accent: #7aa2ff;
+  --danger: #e26a6a;
   --stage: #d8dde6;
 }
 
@@ -21,18 +22,9 @@ html, body {
   line-height: 1.5;
 }
 
-.topbar {
-  padding: 28px 32px 8px;
-}
-.topbar h1 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-}
-.topbar .sub {
-  margin: 4px 0 0;
-  color: var(--muted);
-}
+.topbar { padding: 28px 32px 8px; }
+.topbar h1 { margin: 0; font-size: 22px; font-weight: 600; }
+.topbar .sub { margin: 4px 0 0; color: var(--muted); }
 
 .grid {
   display: grid;
@@ -45,7 +37,10 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
+
+.layers { display: flex; flex-direction: column; gap: 12px; }
 
 .layer {
   background: var(--panel);
@@ -53,11 +48,23 @@ html, body {
   border-radius: 10px;
   padding: 14px 16px 16px;
 }
-.layer h3 {
-  margin: 0 0 10px;
-  font-size: 13px;
-  font-weight: 600;
+.layer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
+.layer-head h3 { margin: 0; font-size: 13px; font-weight: 600; }
+.layer-head .remove {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.layer-head .remove:hover { color: var(--danger); border-color: var(--danger); }
 
 .row {
   display: grid;
@@ -66,10 +73,8 @@ html, body {
   gap: 10px;
   margin: 6px 0;
 }
-.row label {
-  font-size: 12px;
-  color: var(--muted);
-}
+.row label { font-size: 12px; color: var(--muted); }
+.row input[type="range"] { width: 100%; }
 .row .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -91,6 +96,27 @@ html, body {
   padding: 0;
   cursor: pointer;
 }
+.bottom .inset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.add {
+  background: var(--panel);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.add:hover { color: var(--accent); border-color: var(--accent); }
+.add:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .stage {
   background: var(--stage);
@@ -109,15 +135,8 @@ html, body {
   padding: 28px 32px;
   max-width: 360px;
 }
-.card h2 {
-  margin: 0 0 8px;
-  font-size: 18px;
-}
-.card p {
-  margin: 0;
-  color: #4a5468;
-  font-size: 13px;
-}
+.card h2 { margin: 0 0 8px; font-size: 18px; }
+.card p { margin: 0; color: #4a5468; font-size: 13px; }
 
 .output {
   background: var(--panel);
@@ -134,4 +153,6 @@ pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
   color: #d8dde6;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
