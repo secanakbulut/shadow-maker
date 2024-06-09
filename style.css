@@ -22,15 +22,29 @@ html, body {
   line-height: 1.5;
 }
 
-.topbar { padding: 28px 32px 8px; }
-.topbar h1 { margin: 0; font-size: 22px; font-weight: 600; }
-.topbar .sub { margin: 4px 0 0; color: var(--muted); }
+.topbar {
+  padding: 28px 32px 8px;
+}
+.topbar h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.topbar .sub {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
 
 .grid {
   display: grid;
   grid-template-columns: minmax(360px, 480px) 1fr;
   gap: 24px;
   padding: 16px 32px 40px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
 }
 
 .left, .right {
@@ -40,7 +54,44 @@ html, body {
   min-width: 0;
 }
 
-.layers { display: flex; flex-direction: column; gap: 12px; }
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.presets {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.preset-row button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.preset-row button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
 .layer {
   background: var(--panel);
@@ -54,7 +105,11 @@ html, body {
   align-items: center;
   margin-bottom: 10px;
 }
-.layer-head h3 { margin: 0; font-size: 13px; font-weight: 600; }
+.layer-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
 .layer-head .remove {
   background: transparent;
   border: 1px solid var(--line);
@@ -64,7 +119,10 @@ html, body {
   cursor: pointer;
   font-size: 12px;
 }
-.layer-head .remove:hover { color: var(--danger); border-color: var(--danger); }
+.layer-head .remove:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
 
 .row {
   display: grid;
@@ -73,12 +131,18 @@ html, body {
   gap: 10px;
   margin: 6px 0;
 }
-.row label { font-size: 12px; color: var(--muted); }
-.row input[type="range"] { width: 100%; }
+.row label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.row input[type="range"] {
+  width: 100%;
+}
 .row .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-size: 12px;
+  color: var(--text);
 }
 
 .bottom {
@@ -95,6 +159,16 @@ html, body {
   border-radius: 5px;
   padding: 0;
   cursor: pointer;
+}
+.bottom .hex {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 5px 8px;
+  border-radius: 5px;
+  width: 96px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
 }
 .bottom .inset {
   display: flex;
@@ -134,9 +208,17 @@ html, body {
   border-radius: 10px;
   padding: 28px 32px;
   max-width: 360px;
+  text-align: left;
 }
-.card h2 { margin: 0 0 8px; font-size: 18px; }
-.card p { margin: 0; color: #4a5468; font-size: 13px; }
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+.card p {
+  margin: 0;
+  color: #4a5468;
+  font-size: 13px;
+}
 
 .output {
   background: var(--panel);
@@ -144,6 +226,24 @@ html, body {
   border-radius: 10px;
   padding: 12px 14px 14px;
 }
+.output-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.copy {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.copy:hover { border-color: var(--accent); color: var(--accent); }
+.copy.ok { color: #6dd49e; border-color: #6dd49e; }
+
 pre {
   margin: 0;
   background: #0d1016;

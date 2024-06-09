@@ -9,12 +9,24 @@
 <body>
   <header class="topbar">
     <h1>shadow maker</h1>
-    <p class="sub">stack box-shadow layers and watch them update.</p>
+    <p class="sub">stack up to five box-shadows and copy the css.</p>
   </header>
 
   <main class="grid">
     <section class="left">
+      <div class="presets">
+        <span class="label">presets</span>
+        <div class="preset-row" id="presetRow">
+          <button data-preset="subtle">subtle</button>
+          <button data-preset="hard">hard</button>
+          <button data-preset="glow">glow</button>
+          <button data-preset="neumorphism">neumorphism</button>
+          <button data-preset="layered">layered</button>
+        </div>
+      </div>
+
       <div class="layers" id="layers"></div>
+
       <button class="add" id="addBtn">+ add shadow</button>
     </section>
 
@@ -27,6 +39,10 @@
       </div>
 
       <div class="output">
+        <div class="output-head">
+          <span class="label">generated css</span>
+          <button id="copyBtn" class="copy">copy</button>
+        </div>
         <pre id="cssOut"><code>box-shadow: none;</code></pre>
       </div>
     </section>

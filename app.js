@@ -1,5 +1,31 @@
-// shadow-maker, multi layer
+// shadow-maker
+// up to 5 layers, each composes to a single box-shadow string
+
 const MAX_LAYERS = 5;
+
+const presets = {
+  subtle: [
+    { x: 0, y: 1, blur: 2, spread: 0, color: '#00000022', inset: false },
+    { x: 0, y: 2, blur: 6, spread: 0, color: '#00000018', inset: false },
+  ],
+  hard: [
+    { x: 6, y: 6, blur: 0, spread: 0, color: '#000000', inset: false },
+  ],
+  glow: [
+    { x: 0, y: 0, blur: 18, spread: 2, color: '#7aa2ffaa', inset: false },
+    { x: 0, y: 0, blur: 36, spread: 6, color: '#7aa2ff44', inset: false },
+  ],
+  neumorphism: [
+    { x: 8, y: 8, blur: 16, spread: 0, color: '#b8bcc4', inset: false },
+    { x: -8, y: -8, blur: 16, spread: 0, color: '#ffffff', inset: false },
+  ],
+  layered: [
+    { x: 0, y: 1, blur: 2, spread: 0, color: '#0000001f', inset: false },
+    { x: 0, y: 2, blur: 4, spread: 0, color: '#0000001a', inset: false },
+    { x: 0, y: 4, blur: 8, spread: 0, color: '#00000014', inset: false },
+    { x: 0, y: 8, blur: 16, spread: 0, color: '#0000000f', inset: false },
+  ],
+};
 
 let layers = [];
 
@@ -7,11 +33,12 @@ const layersEl = document.getElementById('layers');
 const addBtn = document.getElementById('addBtn');
 const previewEl = document.getElementById('preview');
 const cssOut = document.getElementById('cssOut').querySelector('code');
+const copyBtn = document.getElementById('copyBtn');
 
 function uid() { return Math.random().toString(36).slice(2, 8); }
 
-function newLayer() {
-  return {
+function newLayer(seed) {
+  return Object.assign({
     id: uid(),
     x: 0,
     y: 4,
@@ -20,23 +47,29 @@ function newLayer() {
     color: '#000000',
     alpha: 0.25,
     inset: false,
-  };
+  }, seed || {});
 }
 
+// turn a hex like #aabbcc or #aabbccdd into something we can use directly.
+// if the hex already includes alpha we keep it, otherwise we tack on alpha from the slider.
 function hexWithAlpha(hex, alpha) {
+  const h = hex.replace('#', '');
+  if (h.length === 8) return '#' + h; // already has alpha
   const a = Math.round(Math.max(0, Math.min(1, alpha)) * 255)
     .toString(16).padStart(2, '0');
-  return hex + a;
+  return '#' + h + a;
 }
 
-function shadowString(l) {
+function shadowString(layer) {
   const parts = [];
-  if (l.inset) parts.push('inset');
-  parts.push(l.x + 'px');
-  parts.push(l.y + 'px');
-  parts.push(l.blur + 'px');
-  parts.push(l.spread + 'px');
-  parts.push(hexWithAlpha(l.color, l.alpha));
+  if (layer.inset) parts.push('inset');
+  parts.push(layer.x + 'px');
+  parts.push(layer.y + 'px');
+  parts.push(layer.blur + 'px');
+  parts.push(layer.spread + 'px');
+  // if user pasted a color with explicit alpha, trust it. otherwise apply the slider.
+  const c = (layer.color && layer.color.length === 9) ? layer.color : hexWithAlpha(layer.color, layer.alpha);
+  parts.push(c);
   return parts.join(' ');
 }
 
@@ -47,7 +80,9 @@ function compose() {
 
 function render() {
   layersEl.innerHTML = '';
-  layers.forEach((l, idx) => layersEl.appendChild(layerCard(l, idx)));
+  layers.forEach((l, idx) => {
+    layersEl.appendChild(layerCard(l, idx));
+  });
   addBtn.disabled = layers.length >= MAX_LAYERS;
 
   const value = compose();
@@ -80,8 +115,21 @@ function layerCard(l, idx) {
 
   const colorInput = document.createElement('input');
   colorInput.type = 'color';
-  colorInput.value = l.color;
-  colorInput.oninput = (e) => { l.color = e.target.value; render(); };
+  // strip alpha for the native picker, it doesn't support it
+  colorInput.value = (l.color || '#000000').slice(0, 7);
+  colorInput.oninput = (e) => { l.color = e.target.value; hexBox.value = l.color; render(); };
+
+  const hexBox = document.createElement('input');
+  hexBox.className = 'hex';
+  hexBox.value = l.color;
+  hexBox.oninput = (e) => {
+    const v = e.target.value.trim();
+    if (/^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(v)) {
+      l.color = v;
+      colorInput.value = v.slice(0, 7);
+      render();
+    }
+  };
 
   const insetWrap = document.createElement('label');
   insetWrap.className = 'inset';
@@ -93,6 +141,7 @@ function layerCard(l, idx) {
   insetWrap.appendChild(document.createTextNode('inset'));
 
   bottom.appendChild(colorInput);
+  bottom.appendChild(hexBox);
   bottom.appendChild(insetWrap);
   wrap.appendChild(bottom);
 
@@ -127,6 +176,33 @@ addBtn.onclick = () => {
   render();
 };
 
-layers.push(newLayer());
-layers[0].y = 6; layers[0].blur = 18; layers[0].alpha = 0.3;
+document.getElementById('presetRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-preset]');
+  if (!btn) return;
+  const name = btn.dataset.preset;
+  const seeds = presets[name];
+  if (!seeds) return;
+  // presets ship with explicit hex+alpha colors, so set alpha=1 and let the
+  // 8-digit hex carry the transparency.
+  layers = seeds.slice(0, MAX_LAYERS).map(s => newLayer(Object.assign({}, s, { alpha: 1 })));
+  render();
+});
+
+copyBtn.onclick = async () => {
+  const text = cssOut.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    copyBtn.classList.add('ok');
+    copyBtn.textContent = 'copied';
+    setTimeout(() => {
+      copyBtn.classList.remove('ok');
+      copyBtn.textContent = 'copy';
+    }, 1200);
+  } catch (err) {
+    console.log('clipboard failed', err);
+  }
+};
+
+// start with one layer so the page isn't empty
+layers.push(newLayer({ y: 6, blur: 18, alpha: 0.3 }));
 render();
