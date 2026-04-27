@@ -1,5 +1,7 @@
 # shadow-maker
 
+![](docs/screenshot.png)
+
 a small tool for stacking css `box-shadow` layers and copying the result. plain html, css, js. open `index.html`, no build.
 
 i kept tweaking shadows by hand in devtools and getting the order wrong, so i made this. five layers max because past that nobody is reading the css anyway.
